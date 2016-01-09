@@ -77,9 +77,10 @@ map <silent> <LocalLeader>bd :bufdo :bd<CR>
 map <silent> <LocalLeader>cc :TComment<CR>
 
 let g:VimuxOrientation = "h"
-let g:VimuxHeight = "30"
+let g:VimuxUseNearest = 1
 
 map <silent> <LocalLeader>rl :wa<CR> :VimuxRunLastCommand<CR>
+map <silent> <LocalLeader>vp :wa<CR> :VimuxPromptCommand<CR>
 
 nnoremap <silent> k gk
 nnoremap <silent> j gj
@@ -88,10 +89,6 @@ nnoremap <silent> Y y$
 if version >= 700
   autocmd BufNewFile,BufRead *.txt setlocal spell spelllang=en_us
   autocmd FileType tex setlocal spell spelllang=en_us
-endif
-
-if &t_Co == 256
-  colorscheme jellybeans
 endif
 
 " Highlight trailing whitespace
