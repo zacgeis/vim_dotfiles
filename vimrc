@@ -117,3 +117,6 @@ if version >= 703
   set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 endif
 set undolevels=1000 "maximum number of changes that can be undone
+
+" Allow airline to use powerline font for better display
+let g:airline_powerline_fonts = 1
