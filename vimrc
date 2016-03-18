@@ -64,6 +64,8 @@ autocmd Filetype go setlocal noexpandtab
 autocmd FileType rust setlocal tabstop=4 shiftwidth=4 softtabstop=4
 autocmd BufNewFile,BufRead *.txt setlocal textwidth=78
 autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
+autocmd VimEnter *.scm RainbowParenthesesToggle
+autocmd Syntax *.scm RainbowParenthesesLoadRound
 
 imap <C-L> <SPACE>=><SPACE>
 map <silent> <LocalLeader>rt :!ctags -R --exclude=".git" --exclude="log" --exclude="tmp" --exclude="db" --exclude="pkg" --exclude="deps" --exclude="_build" --extra=+f .<CR>
