@@ -88,12 +88,17 @@ nnoremap <silent> Y y$
 
 if version >= 700
   autocmd BufNewFile,BufRead *.txt setlocal spell spelllang=en_us
+  autocmd BufRead,BufNewFile *.md setlocal spell spelllang=en_us
   autocmd FileType tex setlocal spell spelllang=en_us
+  autocmd FileType gitcommit setlocal spell spelllang=en_us
 endif
 
 " Highlight trailing whitespace
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd BufRead,InsertLeave * match ExtraWhitespace /\s\+$/
+
+" Remove trailing whitespace
+autocmd FileType * autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 " Set up highlight group & retain through colorscheme changes
 highlight ExtraWhitespace ctermbg=red guibg=red
@@ -123,6 +128,3 @@ let g:airline_powerline_fonts = 1
 
 " Prevent automatic comment insertion on newlines
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-" Remove trailing whitespace
-autocmd FileType * autocmd BufWritePre <buffer> :%s/\s\+$//e
