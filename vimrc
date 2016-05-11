@@ -128,3 +128,8 @@ let g:airline_powerline_fonts = 1
 
 " Prevent automatic comment insertion on newlines
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+" Remove trailing whitespace
+autocmd FileType * autocmd BufWritePre <buffer> :%s/\s\+$//e
+
+colorscheme default
