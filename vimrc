@@ -131,3 +131,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " Remove trailing whitespace
 autocmd FileType * autocmd BufWritePre <buffer> :%s/\s\+$//e
+
+" Quickfix grep maps
+nnoremap gw :grep! -rI <cword> .<CR><CR>:cw<CR>
+nnoremap ge :ccl<CR>
