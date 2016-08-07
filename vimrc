@@ -23,6 +23,7 @@ set wrap
 set dir=/tmp//
 set scrolloff=5
 set nofoldenable
+colorscheme Tomorrow-Night
 
 set textwidth=0 nosmartindent tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 
