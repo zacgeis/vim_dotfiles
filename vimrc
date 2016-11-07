@@ -88,10 +88,7 @@ nnoremap <silent> j gj
 nnoremap <silent> Y y$
 
 if version >= 700
-  autocmd BufNewFile,BufRead *.txt setlocal spell spelllang=en_us
-  autocmd BufRead,BufNewFile *.md setlocal spell spelllang=en_us
-  autocmd FileType tex setlocal spell spelllang=en_us
-  autocmd FileType gitcommit setlocal spell spelllang=en_us
+  map <silent> <LocalLeader>sc :setlocal spell! spelllang=en_us<CR>
 endif
 
 " Highlight trailing whitespace
