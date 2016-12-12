@@ -60,11 +60,11 @@ let g:ctrlp_prompt_mappings = {
 
 autocmd FileType php setlocal tabstop=4 shiftwidth=4 softtabstop=4
 autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
-autocmd FileType tex setlocal textwidth=78
+autocmd FileType tex setlocal textwidth=80
 autocmd Filetype go setlocal noexpandtab
 autocmd FileType rust setlocal tabstop=4 shiftwidth=4 softtabstop=4
-autocmd BufNewFile,BufRead *.txt setlocal textwidth=78
-autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
+autocmd BufNewFile,BufRead *.txt setlocal textwidth=80
+autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown textwidth=80
 
 imap <C-L> <SPACE>=><SPACE>
 map <silent> <LocalLeader>rt :!ctags -R --exclude=".git" --exclude="log" --exclude="tmp" --exclude="db" --exclude="pkg" --exclude="deps" --exclude="_build" --extra=+f .<CR>
