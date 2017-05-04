@@ -122,7 +122,7 @@ endif
 set undolevels=1000 "maximum number of changes that can be undone
 
 " Allow airline to use powerline font for better display
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 0
 
 " Prevent automatic comment insertion on newlines
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
