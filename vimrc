@@ -5,9 +5,14 @@ if &shell == "/usr/bin/sudosh"
   set shell=/bin/bash
 endif
 
-filetype off
-call pathogen#runtime_append_all_bundles()
-filetype plugin indent on
+call plug#begin('~/.vim/plugged')
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim', {'commit': '990834ab6cb86961e61c55a8e012eb542ceff10e'}
+Plug 'chriskempson/base16-vim'
+Plug 'flazz/vim-colorschemes'
+Plug 'tomtom/tcomment_vim'
+Plug 'tpope/vim-surround'
+call plug#end()
 
 compiler ruby
 
@@ -32,7 +37,8 @@ set smartcase
 
 set wildignore+=*.pyc,*.o,*.class
 
-let g:ctrlp_custom_ignore = 'node_modules\|_build\|deps\|elm-stuff'
+let g:ctrlp_working_path_mode = 'rw'
+" let g:ctrlp_custom_ignore = 'node_modules\\|_build\\|deps\\|elm-stuff'
 
 let html_use_css=1
 let html_number_lines=0
@@ -45,18 +51,15 @@ let g:no_html_toolbar = 'yes'
 let coffee_no_trailing_space_error = 1
 
 let go_highlight_trailing_whitespace_error = 0
-let NERDTreeIgnore=['\.pyc$', '\.o$', '\.class$']
 
-let g:NoseVirtualenv = ".env/bin/activate"
-
-let g:ctrlp_match_window = "top,order:ttb"
-
-let g:ctrlp_prompt_mappings = {
-  \ 'PrtSelectMove("j")':   ['<c-n>', '<down>'],
-  \ 'PrtSelectMove("k")':   ['<c-p>','<c-k>', '<up>'],
-  \ 'PrtHistory(-1)':       ['<c-j>'],
-  \ 'PrtHistory(1)':        ['<c-k>'],
-\ }
+" let g:ctrlp_match_window = "top,order:ttb"
+"
+" let g:ctrlp_prompt_mappings = {
+"   \\ 'PrtSelectMove("j")':   ['<c-n>', '<down>'],
+"   \\ 'PrtSelectMove("k")':   ['<c-p>','<c-k>', '<up>'],
+"   \\ 'PrtHistory(-1)':       ['<c-j>'],
+"   \\ 'PrtHistory(1)':        ['<c-k>'],
+" \\ }
 
 autocmd FileType php setlocal tabstop=4 shiftwidth=4 softtabstop=4
 autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
@@ -68,17 +71,12 @@ autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown textwidt
 
 imap <C-L> <SPACE>=><SPACE>
 map <silent> <LocalLeader>rt :!ctags -R --exclude=".git" --exclude="log" --exclude="tmp" --exclude="db" --exclude="pkg" --exclude="deps" --exclude="_build" --extra=+f .<CR>
-map <silent> <LocalLeader>nt :NERDTreeToggle<CR>
-map <silent> <LocalLeader>nf :NERDTreeFind<CR>
-map <silent> <leader>ff :CtrlP<CR>
-map <silent> <leader>fb :CtrlPBuffer<CR>
-map <silent> <leader>fr :CtrlPClearCache<CR>
+map <silent> <C-p> :Files<CR>
+map <silent> <leader>ff :Files<CR>
+map <silent> <leader>fb :Buffers<CR>
 map <silent> <LocalLeader>nh :nohls<CR>
 map <silent> <LocalLeader>bd :bufdo :bd<CR>
 map <silent> <LocalLeader>cc :TComment<CR>
-
-let g:VimuxOrientation = "h"
-let g:VimuxUseNearest = 1
 
 map <silent> <LocalLeader>rl :wa<CR> :VimuxRunLastCommand<CR>
 map <silent> <LocalLeader>vp :wa<CR> :VimuxPromptCommand<CR>
@@ -120,9 +118,6 @@ if version >= 703
   set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 endif
 set undolevels=1000 "maximum number of changes that can be undone
-
-" Allow airline to use powerline font for better display
-let g:airline_powerline_fonts = 0
 
 " Prevent automatic comment insertion on newlines
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
