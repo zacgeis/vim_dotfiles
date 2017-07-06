@@ -12,6 +12,7 @@ Plug 'chriskempson/base16-vim'
 Plug 'flazz/vim-colorschemes'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-surround'
+Plug 'scrooloose/nerdtree'
 call plug#end()
 
 compiler ruby
@@ -133,13 +134,6 @@ nnoremap ge :ccl<CR>
 nnoremap <Tab> :bnext <CR>
 nnoremap <S-Tab> :bprevious<CR>
 
-" Netrw
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-let g:netrw_winsize = 10
-augroup ProjectDrawer
-  autocmd!
-  autocmd VimEnter * :Vexplore
-augroup END
+" NerdTree
+map <silent> <LocalLeader>nt :NERDTreeToggle<CR>
+map <silent> <LocalLeader>nf :NERDTreeFind<CR>
