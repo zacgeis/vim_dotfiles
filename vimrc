@@ -29,7 +29,7 @@ set wrap
 set dir=/tmp//
 set scrolloff=5
 set nofoldenable
-colorscheme smyck
+colorscheme Tomorrow-Night
 
 set textwidth=0 nosmartindent tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 
@@ -137,3 +137,34 @@ nnoremap <S-Tab> :bprevious<CR>
 " NerdTree
 map <silent> <LocalLeader>nt :NERDTreeToggle<CR>
 map <silent> <LocalLeader>nf :NERDTreeFind<CR>
+
+" Disable escape
+inoremap <Esc> <Nop>
+vnoremap <Esc> <Nop>
+
+" Chicken Scheme
+
+nmap <silent> <leader>sf :call Scheme_eval_defun()<cr>
+nmap <silent> <leader>sb :call Scheme_send_sexp("(load \"" . expand("%:p") . "\")\n")<cr>
+nmap <silent> <leader>se :call Scheme_new()<cr>
+nmap <silent> <leader>sq :call Scheme_quit()<cr>
+
+function! Scheme_eval_defun()
+    let pos = getpos('.')
+    silent! exec "normal! 99[(yab"
+    call Scheme_send_sexp(@")
+    call setpos('.', pos)
+endfun
+
+function! Scheme_send_sexp(sexp)
+    let ss = escape(a:sexp, '\"')
+    call system("tmux send-keys -t 1 \"" . ss . "\n\"")
+endfun
+
+function! Scheme_new()
+  call system("tmux send-keys -t 1 C-c C-l csi C-m")
+endfun
+
+function! Scheme_quit()
+  call system("tmux send-keys -t 1 C-c C-d C-l")
+endfun
