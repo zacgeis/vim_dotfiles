@@ -66,6 +66,7 @@ autocmd FileType php setlocal tabstop=4 shiftwidth=4 softtabstop=4
 autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
 autocmd FileType tex setlocal textwidth=80
 autocmd Filetype go setlocal noexpandtab
+autocmd Filetype scheme setlocal expandtab
 autocmd FileType rust setlocal tabstop=4 shiftwidth=4 softtabstop=4
 autocmd BufNewFile,BufRead *.txt setlocal textwidth=80
 autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown textwidth=80
