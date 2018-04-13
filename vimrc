@@ -143,6 +143,10 @@ map <silent> <LocalLeader>nf :NERDTreeFind<CR>
 inoremap <Esc> <Nop>
 vnoremap <Esc> <Nop>
 
+" Fix Ctrl-C block insert mode
+inoremap <C-c> <Esc>
+vnoremap <C-c> <Esc>
+
 " Chicken Scheme
 
 nmap <silent> <leader>sf :call Scheme_eval_defun()<cr>
