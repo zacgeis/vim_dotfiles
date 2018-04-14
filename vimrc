@@ -180,3 +180,10 @@ endfun
 function! Scheme_quit()
   call system("tmux send-keys -t 1 C-c C-d C-l")
 endfun
+
+" Game
+
+nmap <silent> <leader>rg :call Run_game()<cr>
+function! Run_game()
+  call system("tmux send-keys -t 1 C-c C-l 'ninja && ./build/game' C-m")
+endfun
