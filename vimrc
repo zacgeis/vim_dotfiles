@@ -73,7 +73,8 @@ autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown textwidt
 
 imap <C-L> <SPACE>=><SPACE>
 map <silent> <LocalLeader>rt :!ctags -R --exclude=".git" --exclude="log" --exclude="tmp" --exclude="db" --exclude="pkg" --exclude="deps" --exclude="_build" --extra=+f .<CR>
-map <silent> <C-p> :Files<CR>
+" map <silent> <C-p> :Files<CR>
+map <C-p> :e **/*
 map <silent> <leader>ff :Files<CR>
 map <silent> <leader>fb :Buffers<CR>
 map <silent> <LocalLeader>nh :nohls<CR>
@@ -120,6 +121,12 @@ if version >= 703
   set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 endif
 set undolevels=1000 "maximum number of changes that can be undone
+
+" for :e **/* autocomplete display
+set wildmenu
+
+" Shortcut for new tabs
+nmap gn :tabnew<cr>
 
 " Prevent automatic comment insertion on newlines
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
