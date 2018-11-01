@@ -6,9 +6,6 @@ if &shell == "/usr/bin/sudosh"
 endif
 
 call plug#begin('~/.vim/plugged')
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim', {'commit': '990834ab6cb86961e61c55a8e012eb542ceff10e'}
-Plug 'chriskempson/base16-vim'
 Plug 'flazz/vim-colorschemes'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-surround'
@@ -73,10 +70,9 @@ autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown textwidt
 
 imap <C-L> <SPACE>=><SPACE>
 map <silent> <LocalLeader>rt :!ctags -R --exclude=".git" --exclude="log" --exclude="tmp" --exclude="db" --exclude="pkg" --exclude="deps" --exclude="_build" --extra=+f .<CR>
-" map <silent> <C-p> :Files<CR>
 map <C-p> :e **/*
-map <silent> <leader>ff :Files<CR>
-map <silent> <leader>fb :Buffers<CR>
+map <leader>ff :e **/*
+map <leader>fb :buffers<CR>
 map <silent> <LocalLeader>nh :nohls<CR>
 map <silent> <LocalLeader>bd :bufdo :bd<CR>
 map <silent> <LocalLeader>cc :TComment<CR>
