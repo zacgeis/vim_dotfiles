@@ -6,13 +6,16 @@ if &shell == "/usr/bin/sudosh"
 endif
 
 call plug#begin('~/.vim/plugged')
+Plug 'sheerun/vim-polyglot'
+Plug 'w0rp/ale'
+Plug 'junegunn/fzf', { 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
+Plug 'jlanzarotta/bufexplorer'
 Plug 'flazz/vim-colorschemes'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdtree'
 call plug#end()
-
-compiler ruby
 
 set hlsearch
 set number
@@ -35,8 +38,17 @@ set smartcase
 
 set wildignore+=*.pyc,*.o,*.class
 
-let g:ctrlp_working_path_mode = 'rw'
-" let g:ctrlp_custom_ignore = 'node_modules\\|_build\\|deps\\|elm-stuff'
+let g:ale_set_highlights = 0
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_linters_explicit = 1
+let g:ale_list_window_size = 3
+let g:ale_linters = {
+      \   'rust': ['rustc', 'cargo'],
+      \   'go': ['go build', 'goimports'],
+      \   'ruby': ['ruby'],
+      \   'c': ['gcc'],
+      \   'cpp': ['gcc'],
+      \}
 
 let html_use_css=1
 let html_number_lines=0
@@ -50,15 +62,6 @@ let coffee_no_trailing_space_error = 1
 
 let go_highlight_trailing_whitespace_error = 0
 
-" let g:ctrlp_match_window = "top,order:ttb"
-"
-" let g:ctrlp_prompt_mappings = {
-"   \\ 'PrtSelectMove("j")':   ['<c-n>', '<down>'],
-"   \\ 'PrtSelectMove("k")':   ['<c-p>','<c-k>', '<up>'],
-"   \\ 'PrtHistory(-1)':       ['<c-j>'],
-"   \\ 'PrtHistory(1)':        ['<c-k>'],
-" \\ }
-
 autocmd FileType php setlocal tabstop=4 shiftwidth=4 softtabstop=4
 autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
 autocmd FileType tex setlocal textwidth=80
@@ -68,25 +71,65 @@ autocmd FileType rust setlocal tabstop=4 shiftwidth=4 softtabstop=4
 autocmd BufNewFile,BufRead *.txt setlocal textwidth=80
 autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown textwidth=80
 
-imap <C-L> <SPACE>=><SPACE>
-map <silent> <LocalLeader>rt :!ctags -R --exclude=".git" --exclude="log" --exclude="tmp" --exclude="db" --exclude="pkg" --exclude="deps" --exclude="_build" --extra=+f .<CR>
-map <C-p> :e **/*
-map <leader>ff :e **/*
-map <leader>fb :buffers<CR>
+imap <C-p> ->
+map <silent> <C-p> :Files<CR>
+map <silent> <LocalLeader>rt :!echo "Generating ctags" && ctags -R --exclude=".git" --exclude="log" --exclude="tmp" --exclude="db" --exclude="pkg" --exclude="deps" --exclude="_build" --extra=+f --fields=+l --langmap=c:.c.h --langmap=c++:.c++.c.cc.cpp.h .<CR>
+map <silent> <LocalLeader>ff :Files<CR>
+map <silent> <LocalLeader>fb :Buffers<CR>
+map <silent> <LocalLeader>ft :Tags<CR>
 map <silent> <LocalLeader>nh :nohls<CR>
 map <silent> <LocalLeader>bd :bufdo :bd<CR>
 map <silent> <LocalLeader>cc :TComment<CR>
+map <silent> <LocalLeader>sc :setlocal spell! spelllang=en_us<CR>
+" set compiler and makeprg with make
+map <LocalLeader>m :make<CR>
 
-map <silent> <LocalLeader>rl :wa<CR> :VimuxRunLastCommand<CR>
-map <silent> <LocalLeader>vp :wa<CR> :VimuxPromptCommand<CR>
+function! GrepPattern(pattern)
+  cgetexpr system("grep -nIr --exclude-dir=.* --exclude-dir=*build* --exclude=tags --exclude=.* '" . a:pattern . "'")
+  cwin
+endfunction
+function! GrepWord()
+  call GrepPattern(expand("<cword>"))
+endfunction
+function! GrepPrompt()
+  let l:pattern = input("Pattern: ")
+  call GrepPattern(l:pattern)
+endfunction
+command! -nargs=0 GrepWord :call GrepWord()
+map <silent> <LocalLeader>gw :GrepWord<CR>
+command! -nargs=0 GrepPrompt :call GrepPrompt()
+map <silent> <LocalLeader>gp :GrepPrompt<CR>
+
+" function! TagDefinition()
+"   let ind = 0
+"   let tags = taglist(expand("<cword>"))
+"   let signatures = []
+"   for entry in tags
+"     let cmd = entry["cmd"]
+"     let file = entry["filename"]
+"     let cmdClean = substitute(strpart(cmd, 2, strlen(cmd) - 4), '^\s*\(.\{-}\)\s*$', '\1', '')
+"     let kind = entry["kind"]
+"     let signature = ""
+"     if kind == "f"
+"       let signature = ind . ": signature: " . cmdClean . ", file: " . file
+"     endif
+"     if kind == "m"
+"       let signature = ind . ": class: " . entry["class"] . ", signature: " . cmdClean . ", file: " . file
+"     endif
+"     silent echo signature
+"     let signatures += [signature]
+"     let ind += 1
+"   endfor
+"   let choice = input("signature: ")
+"   silent echo ""
+"   silent echo signatures[choice]
+" endfunction
+" command! -nargs=0 TagDefinition :call TagDefinition()
+map <silent> <LocalLeader>td :ts expand("<cword>")<CR>
 
 nnoremap <silent> k gk
 nnoremap <silent> j gj
 nnoremap <silent> Y y$
-
-if version >= 700
-  map <silent> <LocalLeader>sc :setlocal spell! spelllang=en_us<CR>
-endif
 
 " Highlight trailing whitespace
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
@@ -130,13 +173,9 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " Remove trailing whitespace
 autocmd FileType * autocmd BufWritePre <buffer> :%s/\s\+$//e
 
-" Quickfix grep maps
-nnoremap gw :grep! -rI <cword> .<CR><CR>:cw<CR>
-nnoremap ge :ccl<CR>
-
 " Quick cycle through buffers
-nnoremap <Tab> :bnext <CR>
-nnoremap <S-Tab> :bprevious<CR>
+" nnoremap <Tab> :bnext <CR>
+" nnoremap <S-Tab> :bprevious<CR>
 
 " NerdTree
 map <silent> <LocalLeader>nt :NERDTreeToggle<CR>
@@ -152,28 +191,28 @@ vnoremap <C-c> <Esc>
 
 " Chicken Scheme
 
-nmap <silent> <leader>sf :call Scheme_eval_defun()<cr>
-nmap <silent> <leader>sb :call Scheme_send_sexp("(load \"" . expand("%:p") . "\")\n")<cr>
-nmap <silent> <leader>se :call Scheme_new()<cr>
-nmap <silent> <leader>sq :call Scheme_quit()<cr>
+nmap <silent> <leader>sf :call SchemeEvalDefun()<cr>
+nmap <silent> <leader>sb :call SchemeSendSexp("(load \"" . expand("%:p") . "\")\n")<cr>
+nmap <silent> <leader>se :call SchemeNew()<cr>
+nmap <silent> <leader>sq :call SchemeQuit()<cr>
 
-function! Scheme_eval_defun()
+function! SchemeEvalDefun()
     let pos = getpos('.')
     silent! exec "normal! 99[(yab"
-    call Scheme_send_sexp(@")
+    call SchemeSendSexp(@")
     call setpos('.', pos)
 endfun
 
-function! Scheme_send_sexp(sexp)
+function! SchemeSendSexp(sexp)
     let ss = escape(a:sexp, '\"')
     call system("tmux send-keys -t 1 \"" . ss . "\n\"")
 endfun
 
-function! Scheme_new()
+function! SchemeNew()
   call system("tmux send-keys -t 1 C-c C-l csi C-m")
 endfun
 
-function! Scheme_quit()
+function! SchemeQuit()
   call system("tmux send-keys -t 1 C-c C-d C-l")
 endfun
 
@@ -183,3 +222,51 @@ nmap <silent> <leader>rg :call Run_game()<cr>
 function! Run_game()
   call system("tmux send-keys -t 1 C-c C-l 'ninja && ./build/game' C-m")
 endfun
+
+" function! Terminal_new()
+"   execute "terminal"
+"   let g:terminal_buffer = bufnr("%")
+"   let g:terminal_window = win_getid()
+"   execute "wincmd J"
+"   execute "resize 20"
+"   execute "NERDTreeToggle"
+"   execute "NERDTreeToggle"
+"   win_gotoid(g:terminal_window)
+" endfun
+
+" function! Terminal_run_command()
+"   call term_sendkeys(g:terminal_buffer, g:terminal_command)
+"   call term_sendkeys(g:terminal_buffer, "\<C-l>\<CR>")
+"   win_gotoid(g:terminal_window)
+" endfun
+
+" Can be automatically set in a local project vimrc
+" function! RunnerSetCommand()
+"   let g:terminal_command = input("Enter command: ")
+" endfun
+"
+" function! RunnerRunCommand()
+"   exec "new"
+"   exec "read !" . g:terminal_command
+"   exec "cexpr []"
+"   exec "caddbuffer"
+"   exec "q!"
+"   exec "cw"
+" endfun
+" map <silent> <LocalLeader>rs :call RunnerSetCommand()<CR>
+" map <silent> <LocalLeader>rr :call RunnerRunCommand()<CR>
+
+augroup Binary
+  au!
+  au BufReadPre  *.bmp let &bin=1
+  au BufReadPost *.bmp if &bin | %!xxd
+  au BufReadPost *.bmp set ft=xxd | endif
+  au BufWritePre *.bmp if &bin | %!xxd -r
+  au BufWritePre *.bmp endif
+  au BufWritePost *.bmp if &bin | %!xxd
+  au BufWritePost *.bmp set nomod | endif
+augroup END
+
+" For project specific .vimrc files
+set exrc
+set secure

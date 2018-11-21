@@ -4,3 +4,4 @@
 tags
 /vim/bundle/Command-T/ruby/command-t/ext.bundle
 *.gitignore
+/vim/plugged/
