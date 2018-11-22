@@ -6,7 +6,6 @@ if &shell == "/usr/bin/sudosh"
 endif
 
 call plug#begin('~/.vim/plugged')
-Plug 'sheerun/vim-polyglot'
 Plug 'w0rp/ale'
 Plug 'junegunn/fzf', { 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
