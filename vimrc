@@ -37,6 +37,9 @@ set smartcase
 
 set wildignore+=*.pyc,*.o,*.class
 
+" let g:ale_completion_delay = 100
+" let g:ale_completion_enabled = 1
+" let g:ale_completion_max_suggestions = 50
 let g:ale_set_highlights = 0
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_linters_explicit = 1
@@ -45,9 +48,12 @@ let g:ale_linters = {
       \   'rust': ['rustc', 'cargo'],
       \   'go': ['go build', 'goimports'],
       \   'ruby': ['ruby'],
-      \   'c': ['gcc'],
-      \   'cpp': ['gcc'],
+      \   'c': ['clangd'],
+      \   'cpp': ['clangd'],
       \}
+map <silent> <LocalLeader>ah :ALEHover<CR>
+map <silent> <LocalLeader>ad :ALEGoToDefinition<CR>
+map <silent> <LocalLeader>ar :ALEFindReferences<CR>
 
 let html_use_css=1
 let html_number_lines=0
