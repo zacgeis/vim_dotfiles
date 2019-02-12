@@ -10,10 +10,11 @@ Plug 'w0rp/ale'
 Plug 'junegunn/fzf', { 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 Plug 'jlanzarotta/bufexplorer'
-Plug 'flazz/vim-colorschemes'
+Plug 'chriskempson/base16-vim'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdtree'
+Plug 'Valloric/YouCompleteMe'
 call plug#end()
 
 set hlsearch
@@ -28,7 +29,13 @@ set wrap
 set dir=/tmp//
 set scrolloff=5
 set nofoldenable
-colorscheme Tomorrow-Night
+
+" base16 unified colorschemes
+" vimrc_background comes from base16-shell
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  source ~/.vimrc_background
+endif
 
 set textwidth=0 nosmartindent tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 
@@ -37,9 +44,19 @@ set smartcase
 
 set wildignore+=*.pyc,*.o,*.class
 
-" let g:ale_completion_delay = 100
+let g:ycm_enable_diagnostic_highlighting = 0
+let g:ycm_auto_trigger = 0
+let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_max_num_candidates = 10
+let g:ycm_max_num_identifier_candidates = 5
+let g:ycm_key_invoke_completion = '<C-x><C-o>'
+
+" set completeopt-=preview
 " let g:ale_completion_enabled = 1
+" let g:ale_completion_delay = 100
 " let g:ale_completion_max_suggestions = 50
+" imap <C-X><C-O> <Plug>(ale_complete)
+
 let g:ale_set_highlights = 0
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_linters_explicit = 1
@@ -48,12 +65,13 @@ let g:ale_linters = {
       \   'rust': ['rustc', 'cargo'],
       \   'go': ['go build', 'goimports'],
       \   'ruby': ['ruby'],
-      \   'c': ['clangd'],
-      \   'cpp': ['clangd'],
+      \   'python': ['pyls'],
       \}
-map <silent> <LocalLeader>ah :ALEHover<CR>
-map <silent> <LocalLeader>ad :ALEGoToDefinition<CR>
-map <silent> <LocalLeader>ar :ALEFindReferences<CR>
+      " \   'c': ['clangd'],
+      " \   'cpp': ['clangd'],
+map <silent> gh :ALEHover<CR>
+map <silent> gd :ALEGoToDefinition<CR>
+map <silent> gr :ALEFindReferences<CR>
 
 let html_use_css=1
 let html_number_lines=0
@@ -101,9 +119,9 @@ function! GrepPrompt()
   call GrepPattern(l:pattern)
 endfunction
 command! -nargs=0 GrepWord :call GrepWord()
-map <silent> <LocalLeader>gw :GrepWord<CR>
+map <silent> gw :GrepWord<CR>
 command! -nargs=0 GrepPrompt :call GrepPrompt()
-map <silent> <LocalLeader>gp :GrepPrompt<CR>
+map <silent> gp :GrepPrompt<CR>
 
 " function! TagDefinition()
 "   let ind = 0
