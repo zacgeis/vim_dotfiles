@@ -17,6 +17,8 @@ Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdtree'
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'airblade/vim-gitgutter'
 call plug#end()
 
@@ -57,20 +59,39 @@ let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal 
 let g:lsp_highlights_enabled = 1
 let g:lsp_textprop_enabled = 0
 let g:lsp_virtual_text_enabled = 0
-if executable('clangd')
-  augroup lsp_clangd
-    autocmd!
-    autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'clangd',
-          \ 'cmd': {server_info->['clangd']},
-          \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-          \ })
-    autocmd FileType c setlocal omnifunc=lsp#complete
-    autocmd FileType cpp setlocal omnifunc=lsp#complete
-    autocmd FileType objc setlocal omnifunc=lsp#complete
-    autocmd FileType objcpp setlocal omnifunc=lsp#complete
-  augroup end
-endif
+
+let g:lsp_signs_error = {'text': ' X'}
+let g:lsp_signs_warning = {'text': ' ?'}
+let g:lsp_signs_hint = {'text': ' .'}
+" if executable('clangd')
+"   augroup lsp_clangd
+"     autocmd!
+"     autocmd User lsp_setup call lsp#register_server({
+"           \ 'name': 'clangd',
+"           \ 'cmd': {server_info->['clangd']},
+"           \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+"           \ })
+"     autocmd FileType c setlocal omnifunc=lsp#complete
+"     autocmd FileType cpp setlocal omnifunc=lsp#complete
+"     autocmd FileType objc setlocal omnifunc=lsp#complete
+"     autocmd FileType objcpp setlocal omnifunc=lsp#complete
+"   augroup end
+" endif
+
+let g:asyncomplete_auto_popup = 0
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+inoremap <silent><expr> <TAB>
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ asyncomplete#force_refresh()
+
 map <silent> gh :LspHover<CR>
 map <silent> gd :LspDefinition<CR>
 map <silent> gr :LspReferences<CR>
