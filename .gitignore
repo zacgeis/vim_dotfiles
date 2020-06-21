@@ -1,7 +1,6 @@
-/.DS_Store
+.DS_Store
 *.swp
 .netrwhist
 tags
-/vim/bundle/Command-T/ruby/command-t/ext.bundle
 *.gitignore
-/vim/plugged/
+vim/plugged
