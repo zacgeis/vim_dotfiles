@@ -63,20 +63,20 @@ let g:lsp_virtual_text_enabled = 0
 let g:lsp_signs_error = {'text': ' X'}
 let g:lsp_signs_warning = {'text': ' ?'}
 let g:lsp_signs_hint = {'text': ' .'}
-" if executable('clangd')
-"   augroup lsp_clangd
-"     autocmd!
-"     autocmd User lsp_setup call lsp#register_server({
-"           \ 'name': 'clangd',
-"           \ 'cmd': {server_info->['clangd']},
-"           \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-"           \ })
-"     autocmd FileType c setlocal omnifunc=lsp#complete
-"     autocmd FileType cpp setlocal omnifunc=lsp#complete
-"     autocmd FileType objc setlocal omnifunc=lsp#complete
-"     autocmd FileType objcpp setlocal omnifunc=lsp#complete
-"   augroup end
-" endif
+if executable('clangd')
+  augroup lsp_clangd
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'clangd',
+          \ 'cmd': {server_info->['clangd']},
+          \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+          \ })
+    autocmd FileType c setlocal omnifunc=lsp#complete
+    autocmd FileType cpp setlocal omnifunc=lsp#complete
+    autocmd FileType objc setlocal omnifunc=lsp#complete
+    autocmd FileType objcpp setlocal omnifunc=lsp#complete
+  augroup end
+endif
 
 let g:asyncomplete_auto_popup = 0
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
