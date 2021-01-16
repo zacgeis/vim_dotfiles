@@ -1,1 +1,3 @@
-Symlink `vim` and `vimrc` into your home directory as `.vim` and `.vimrc`.
+Archived repo...
+
+See https://github.com/zacgeis/dotfiles
